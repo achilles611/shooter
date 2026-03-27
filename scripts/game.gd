@@ -1,7 +1,7 @@
 extends Node2D
 
-const SCREEN_SIZE := Vector2(1920, 1080)
-const PLAYER_START_POSITION := Vector2(960, 972)
+const SCREEN_SIZE := Vector2(1080, 1920)
+const PLAYER_START_POSITION := Vector2(540, 1742)
 const ENEMY_COLUMNS := 9
 const ENEMY_ROWS := 9
 const ENEMY_SPACING := Vector2(96, 82)
@@ -119,7 +119,7 @@ func _spawn_level_one_wave() -> void:
 	enemy_direction = 1.0
 	enemy_horizontal_speed = 110.0
 	enemy_drop_distance = 34.0
-	enemy_formation.position = Vector2(SCREEN_SIZE.x * 0.5, 108.0)
+	enemy_formation.position = Vector2(SCREEN_SIZE.x * 0.5, 156.0)
 
 	var formation_width: float = float(ENEMY_COLUMNS - 1) * ENEMY_SPACING.x
 	var start: Vector2 = Vector2(-formation_width * 0.5, 0.0)
@@ -151,7 +151,7 @@ func _spawn_level_two_wave() -> void:
 
 	for enemy_index in 8:
 		var enemy = GreenEnemyScene.new()
-		var start_position: Vector2 = Vector2(170.0 + float(enemy_index) * 200.0, 150.0 + float(enemy_index % 2) * 95.0)
+		var start_position: Vector2 = Vector2(126.0 + float(enemy_index) * 118.0, 220.0 + float(enemy_index % 2) * 118.0)
 		var direction: float = -1.0 if enemy_index % 2 == 0 else 1.0
 		enemy.setup(start_position, direction, float(enemy_index) * 0.55)
 		enemy.drop_chance = LEVEL_TWO_DROP_CHANCE
@@ -166,7 +166,7 @@ func _spawn_level_three_boss() -> void:
 		child.free()
 
 	var boss = MetatronBossScene.new()
-	boss.position = Vector2(SCREEN_SIZE.x * 0.5, 210.0)
+	boss.position = Vector2(SCREEN_SIZE.x * 0.5, 300.0)
 	boss.point_value = LEVEL_THREE_POINTS
 	enemy_formation.add_child(boss)
 

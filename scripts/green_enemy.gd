@@ -1,7 +1,7 @@
 extends Node2D
 
-const SCREEN_SIZE := Vector2(1920.0, 1080.0)
-const EDGE_PADDING := 80.0
+const SCREEN_SIZE := Vector2(1080.0, 1920.0)
+const EDGE_PADDING := 92.0
 
 @export var radius: float = 22.0
 @export var point_value: int = 5

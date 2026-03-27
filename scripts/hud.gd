@@ -3,7 +3,7 @@ extends Control
 signal retry_requested
 signal quit_requested
 
-const SCREEN_SIZE := Vector2(1920.0, 1080.0)
+const SCREEN_SIZE := Vector2(1080.0, 1920.0)
 
 var max_hearts: int = 3
 var current_hearts: int = 3
@@ -106,7 +106,7 @@ func _draw_heart(center: Vector2, size: float, filled: bool) -> void:
 func _create_score_label() -> void:
 	score_label = Label.new()
 	score_label.position = Vector2(220.0, SCREEN_SIZE.y - 88.0)
-	score_label.size = Vector2(360.0, 48.0)
+	score_label.size = Vector2(280.0, 48.0)
 	score_label.add_theme_font_size_override("font_size", 28)
 	score_label.add_theme_color_override("font_color", Color(0.92, 1.0, 0.96, 1.0))
 	add_child(score_label)
@@ -114,11 +114,11 @@ func _create_score_label() -> void:
 
 func _create_flash_label() -> void:
 	flash_label = Label.new()
-	flash_label.size = Vector2(1720.0, 260.0)
-	flash_label.position = Vector2((SCREEN_SIZE.x - flash_label.size.x) * 0.5, 88.0)
+	flash_label.size = Vector2(980.0, 320.0)
+	flash_label.position = Vector2((SCREEN_SIZE.x - flash_label.size.x) * 0.5, 126.0)
 	flash_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	flash_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	flash_label.add_theme_font_size_override("font_size", 112)
+	flash_label.add_theme_font_size_override("font_size", 94)
 	flash_label.add_theme_color_override("font_color", Color(0.45, 1.0, 0.55, 1.0))
 	flash_label.add_theme_color_override("font_shadow_color", Color(0.0, 0.28, 0.04, 0.95))
 	flash_label.add_theme_constant_override("shadow_offset_x", 4)
@@ -140,8 +140,8 @@ func _create_flash_label() -> void:
 func _create_game_over_panel() -> void:
 	game_over_panel = Panel.new()
 	game_over_panel.visible = false
-	game_over_panel.position = Vector2(640.0, 270.0)
-	game_over_panel.size = Vector2(640.0, 420.0)
+	game_over_panel.position = Vector2(170.0, 640.0)
+	game_over_panel.size = Vector2(740.0, 420.0)
 
 	var panel_style: StyleBoxFlat = StyleBoxFlat.new()
 	panel_style.bg_color = Color(1.0, 1.0, 1.0, 0.96)
@@ -159,8 +159,8 @@ func _create_game_over_panel() -> void:
 
 	var title: Label = Label.new()
 	title.text = "GAME OVER"
-	title.position = Vector2(120.0, 70.0)
-	title.size = Vector2(400.0, 80.0)
+	title.position = Vector2(130.0, 70.0)
+	title.size = Vector2(480.0, 80.0)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 48)
 	title.add_theme_color_override("font_color", Color(0.0, 0.0, 0.0, 1.0))
@@ -168,14 +168,14 @@ func _create_game_over_panel() -> void:
 
 	retry_button = Button.new()
 	retry_button.text = "Try Again"
-	retry_button.position = Vector2(200.0, 190.0)
+	retry_button.position = Vector2(250.0, 190.0)
 	retry_button.size = Vector2(240.0, 58.0)
 	retry_button.pressed.connect(_on_retry_pressed)
 	game_over_panel.add_child(retry_button)
 
 	quit_button = Button.new()
 	quit_button.text = "Quit"
-	quit_button.position = Vector2(200.0, 272.0)
+	quit_button.position = Vector2(250.0, 272.0)
 	quit_button.size = Vector2(240.0, 58.0)
 	quit_button.pressed.connect(_on_quit_pressed)
 	game_over_panel.add_child(quit_button)

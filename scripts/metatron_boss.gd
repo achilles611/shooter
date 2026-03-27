@@ -1,7 +1,7 @@
 extends Node2D
 
-const SCREEN_SIZE := Vector2(1920.0, 1080.0)
-const TOP_AREA := Rect2(Vector2(150.0, 80.0), Vector2(1620.0, 320.0))
+const SCREEN_SIZE := Vector2(1080.0, 1920.0)
+const TOP_AREA := Rect2(Vector2(110.0, 90.0), Vector2(860.0, 520.0))
 const BossAttackSound = preload("res://voicebosch-the-moses-laser-cannon-182841.mp3")
 const BOSS_ATTACK_SOUND_START := 12.0
 

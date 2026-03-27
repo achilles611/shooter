@@ -1,6 +1,6 @@
 extends Node2D
 
-const SCREEN_SIZE := Vector2(1920.0, 1080.0)
+const SCREEN_SIZE := Vector2(1080.0, 1920.0)
 
 @export var speed: float = 1100.0
 @export var hit_radius: float = 12.0

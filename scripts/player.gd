@@ -2,7 +2,7 @@ extends Node2D
 
 signal shots_fired(shots)
 
-const SCREEN_SIZE := Vector2(1920, 1080)
+const SCREEN_SIZE := Vector2(1080, 1920)
 const HORIZONTAL_PADDING := 24.0
 const TOP_BOUND := SCREEN_SIZE.y * 0.75 + 16.0
 const BOTTOM_BOUND := SCREEN_SIZE.y - 34.0
@@ -128,11 +128,11 @@ func _append_beam_pattern(shots: Array, origin: Vector2) -> void:
 func _get_emitter_offsets() -> Array[Vector2]:
 	var offsets: Array[Vector2] = [Vector2.ZERO]
 	var wingman_offsets: Array[Vector2] = [
-		Vector2(92.0, 0.0),
-		Vector2(184.0, 0.0),
-		Vector2(276.0, 0.0),
-		Vector2(368.0, 0.0),
-		Vector2(460.0, 0.0),
+		Vector2(62.0, 0.0),
+		Vector2(124.0, 0.0),
+		Vector2(186.0, 0.0),
+		Vector2(248.0, 0.0),
+		Vector2(310.0, 0.0),
 	]
 
 	for wingman_index in wingman_count:

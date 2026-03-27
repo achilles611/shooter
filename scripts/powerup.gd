@@ -1,6 +1,6 @@
 extends Node2D
 
-const SCREEN_SIZE := Vector2(1920.0, 1080.0)
+const SCREEN_SIZE := Vector2(1080.0, 1920.0)
 
 @export var fall_speed: float = 180.0
 @export var pickup_radius: float = 28.0

@@ -1,6 +1,6 @@
 extends Node2D
 
-const SCREEN_SIZE := Vector2(1920, 1080)
+const SCREEN_SIZE := Vector2(1080, 1920)
 
 @export var star_count: int = 110
 @export var speed_min: float = 24.0
