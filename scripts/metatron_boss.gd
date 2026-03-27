@@ -15,6 +15,8 @@ const BOSS_ATTACK_SOUND_START := 12.0
 @export var beam_width: float = SCREEN_SIZE.x / 5.0
 @export var beam_turn_rate: float = 1.1
 @export var attack_cycle_time: float = 3.6
+@export var beam_target_lag: float = 0.5
+@export var warning_marker_duration: float = 0.5
 
 var health: int = max_health
 var velocity: Vector2 = Vector2(200.0, 165.0)
@@ -26,6 +28,11 @@ var beam_direction: Vector2 = Vector2.DOWN
 var bubble_count: int = 18
 var bubble_spin_time: float = 0.0
 var attack_audio: AudioStreamPlayer
+var fight_time: float = 0.0
+var player_position_history: Array[Vector2] = []
+var player_position_time_history: Array[float] = []
+var warning_target_position: Vector2 = Vector2.ZERO
+var warning_marker_active: bool = false
 
 
 func _ready() -> void:
@@ -38,21 +45,32 @@ func _ready() -> void:
 
 
 func advance(delta: float, player_position: Vector2) -> void:
+	fight_time += delta
+	_record_player_position(player_position)
 	bubble_spin_time += delta
 
 	match state:
 		&"moving":
 			attack_timer += delta
+			warning_marker_active = false
 			_move_and_bounce(delta)
 			if attack_timer >= attack_cycle_time:
 				state = &"charging"
 				charge_timer = charge_duration
+				warning_marker_active = false
 		&"charging":
 			charge_timer = maxf(charge_timer - delta, 0.0)
+			if not warning_marker_active and charge_timer <= warning_marker_duration:
+				warning_target_position = player_position
+				warning_marker_active = true
 			if charge_timer <= 0.0:
 				state = &"firing"
 				beam_timer = beam_duration
-				beam_direction = (player_position - global_position).normalized()
+				var lagged_target: Vector2 = warning_target_position if warning_marker_active else _get_lagged_player_position()
+				beam_direction = (lagged_target - global_position).normalized()
+				if beam_direction.length_squared() <= 0.0001:
+					beam_direction = Vector2.DOWN
+				warning_marker_active = false
 				_play_attack_sound()
 		&"firing":
 			attack_timer = 0.0
@@ -96,6 +114,29 @@ func _play_attack_sound() -> void:
 	attack_audio.play(BOSS_ATTACK_SOUND_START)
 
 
+func _record_player_position(player_position: Vector2) -> void:
+	player_position_history.append(player_position)
+	player_position_time_history.append(fight_time)
+
+	var cutoff_time: float = fight_time - maxf(beam_target_lag + 1.0, 1.5)
+	while player_position_time_history.size() > 1 and player_position_time_history[0] < cutoff_time:
+		player_position_time_history.remove_at(0)
+		player_position_history.remove_at(0)
+
+
+func _get_lagged_player_position() -> Vector2:
+	if player_position_history.is_empty():
+		return global_position + beam_direction * 200.0
+
+	var target_time: float = fight_time - beam_target_lag
+
+	for history_index in range(player_position_time_history.size() - 1, -1, -1):
+		if player_position_time_history[history_index] <= target_time:
+			return player_position_history[history_index]
+
+	return player_position_history[0]
+
+
 func _move_and_bounce(delta: float) -> void:
 	position += velocity * delta
 
@@ -123,6 +164,8 @@ func _draw() -> void:
 
 	if is_charging():
 		_draw_charge_bubbles()
+		if warning_marker_active:
+			_draw_warning_marker()
 
 	if is_beam_active():
 		_draw_beam()
@@ -182,6 +225,32 @@ func _draw_beam() -> void:
 
 	draw_colored_polygon(points, Color(0.45, 0.9, 1.0, 0.18))
 	draw_line(start, end, Color(0.84, 0.98, 1.0, 0.88), 12.0, true)
+
+
+func _draw_warning_marker() -> void:
+	var local_target: Vector2 = to_local(warning_target_position)
+	var pulse: float = 1.0 + sin(bubble_spin_time * 14.0) * 0.08
+	var ring_radius: float = 82.0 * pulse
+	var glow_color: Color = Color(1.0, 0.12, 0.12, 0.16)
+	var marker_color: Color = Color(1.0, 0.18, 0.18, 0.92)
+	var cross_half_size: float = 54.0 * pulse
+
+	draw_circle(local_target, ring_radius + 12.0, glow_color)
+	draw_arc(local_target, ring_radius, 0.0, TAU, 64, marker_color, 7.0, true)
+	draw_line(
+		local_target + Vector2(-cross_half_size, -cross_half_size),
+		local_target + Vector2(cross_half_size, cross_half_size),
+		marker_color,
+		9.0,
+		true
+	)
+	draw_line(
+		local_target + Vector2(-cross_half_size, cross_half_size),
+		local_target + Vector2(cross_half_size, -cross_half_size),
+		marker_color,
+		9.0,
+		true
+	)
 
 
 func _get_outer_points(distance: float) -> Array[Vector2]:
