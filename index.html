@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SHOOTER</title>
+  <style>
+    :root {
+      --bg: #020407;
+      --panel: rgba(10, 18, 28, 0.84);
+      --border: rgba(123, 222, 255, 0.35);
+      --glow: rgba(72, 196, 255, 0.28);
+      --text: #e8f7ff;
+      --muted: #9fc2d0;
+      --accent: #62d5ff;
+      --good: #7dff96;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top, rgba(16, 55, 93, 0.25), transparent 40%),
+        linear-gradient(180deg, #020407 0%, #000000 100%);
+      color: var(--text);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .panel {
+      width: min(760px, 100%);
+      padding: 36px 32px;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: var(--panel);
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+        0 0 42px var(--glow);
+      backdrop-filter: blur(10px);
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      color: var(--accent);
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-shadow: 0 0 20px rgba(98, 213, 255, 0.45);
+    }
+
+    p {
+      margin: 0 0 14px;
+      line-height: 1.55;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .status {
+      margin: 22px 0 0;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text);
+    }
+
+    .status strong {
+      color: var(--good);
+    }
+
+    code {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.06);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    ul {
+      margin: 14px 0 0;
+      padding-left: 20px;
+      color: var(--muted);
+    }
+
+    a {
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <main class="panel">
+    <h1>SHOOTER</h1>
+    <p id="intro">Checking for a web build...</p>
+    <div class="status" id="status">
+      <strong>Starting up.</strong>
+    </div>
+    <ul id="details" hidden>
+      <li>Wasmer now has a root <code>index.html</code>, so the site should no longer return a bare 404.</li>
+      <li>The actual playable Godot web build still needs to be exported from Godot.</li>
+      <li>When you export, place the generated web files in <code>/public</code> or <code>/web</code>.</li>
+    </ul>
+  </main>
+
+  <script>
+    const candidates = [
+      "./public/index.html",
+      "./web/index.html"
+    ];
+
+    const intro = document.getElementById("intro");
+    const status = document.getElementById("status");
+    const details = document.getElementById("details");
+
+    async function tryRedirect() {
+      for (const path of candidates) {
+        try {
+          const response = await fetch(path, { method: "HEAD", cache: "no-store" });
+          if (response.ok) {
+            intro.textContent = "Web build found. Launching now...";
+            status.innerHTML = `<strong>Redirecting</strong> to <code>${path}</code>`;
+            window.location.replace(path);
+            return;
+          }
+        } catch (error) {
+        }
+      }
+
+      intro.textContent = "This deploy resolves correctly now, but no Godot web export was found yet.";
+      status.innerHTML = "<strong>Ready for export.</strong> Add the exported Godot HTML5 build files and this page will route visitors to them.";
+      details.hidden = false;
+    }
+
+    tryRedirect();
+  </script>
+</body>
+</html>
