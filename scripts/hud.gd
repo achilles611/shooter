@@ -127,9 +127,10 @@ func _create_flash_label() -> void:
 	var script_font: SystemFont = SystemFont.new()
 	script_font.font_names = PackedStringArray([
 		"Old English Text MT",
+		"Engravers Old English BT",
+		"Cloister Black",
+		"Blackletter686 BT",
 		"Lucida Calligraphy",
-		"Gabriola",
-		"Georgia",
 	])
 	flash_label.add_theme_font_override("font", script_font)
 	flash_label.visible = false

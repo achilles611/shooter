@@ -9,6 +9,7 @@ const BOTTOM_BOUND := SCREEN_SIZE.y - 34.0
 const TOUCH_ZONE_TOP := SCREEN_SIZE.y * 0.75
 const MAX_BEAM_COUNT := 12
 const MAX_TOTAL_SHIPS := 6
+const MOBILE_DRAG_SPEED_MULTIPLIER := 1.18
 
 @export var move_speed: float = 820.0
 @export var shot_cooldown: float = 0.14
@@ -35,7 +36,7 @@ func _process(delta: float) -> void:
 func _update_movement(delta: float) -> void:
 	if using_pointer_drag:
 		var clamped_target: Vector2 = _clamp_to_play_area(pointer_target_position)
-		position = position.move_toward(clamped_target, move_speed * 1.55 * delta)
+		position = position.move_toward(clamped_target, move_speed * MOBILE_DRAG_SPEED_MULTIPLIER * delta)
 	else:
 		var input_vector: Vector2 = Vector2(
 			_get_axis([KEY_A, KEY_LEFT], [KEY_D, KEY_RIGHT]),
