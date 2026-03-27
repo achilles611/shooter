@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/game.gd" id="1_hsmq7"]
+[ext_resource type="Script" path="res://scripts/starfield.gd" id="2_ty2pw"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="3_d4k4l"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="4_y1v0g"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_hsmq7")
+
+[node name="Starfield" type="Node2D" parent="."]
+script = ExtResource("2_ty2pw")
+
+[node name="EnemyFormation" type="Node2D" parent="."]
+
+[node name="Lasers" type="Node2D" parent="."]
+
+[node name="Powerups" type="Node2D" parent="."]
+
+[node name="Effects" type="Node2D" parent="."]
+
+[node name="Player" type="Node2D" parent="."]
+position = Vector2(960, 972)
+script = ExtResource("3_d4k4l")
+
+[node name="HUD" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("4_y1v0g")
